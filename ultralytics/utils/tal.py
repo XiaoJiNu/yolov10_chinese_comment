@@ -275,6 +275,14 @@ class RotatedTaskAlignedAssigner(TaskAlignedAssigner):
         Returns:
             (Tensor): shape(b, n_boxes, h*w)
         """
+        '''
+        这段代码是一个名为`select_candidates_in_gts`的函数，它的目的是为旋转的边界框选择正锚点中心。
+        函数接收两个参数：`xy_centers`和`gt_bboxes`。`xy_centers`是一个形状为(h*w, 2)的张量，表示锚点的中心坐标。`gt_bboxes`是一个形状为(b, n_boxes, 5)的张量，表示旋转的边界框。
+        函数首先将`gt_bboxes`转换为四个角点的坐标，然后计算每个角点到锚点中心的向量（`ap`），以及角点之间的向量（`ab`和`ad`）。
+        接下来，函数计算向量`ap`与向量`ab`和`ad`的点积，以及向量`ab`和`ad`的模长。
+        最后，函数返回一个布尔张量，表示哪些锚点中心位于旋转的边界框内。如果向量`ap`在向量`ab`和`ad`的方向上的投影长度在0和向量`ab`和`ad`的模长之间，那么这个锚点中心就被认为是在旋转的边界框内。
+        总的来说，这个函数的作用是找出哪些锚点中心位于旋转的边界框内，这对于目标检测任务中的正样本选择是非常重要的。
+        '''
         # (b, n_boxes, 5) --> (b, n_boxes, 4, 2)
         corners = xywhr2xyxyxyxy(gt_bboxes)
         # (b, n_boxes, 1, 2)

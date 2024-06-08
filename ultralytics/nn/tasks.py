@@ -271,6 +271,7 @@ class BaseModel(nn.Module):
         if not hasattr(self, "criterion"):
             self.criterion = self.init_criterion()
 
+        # 此时得到的结果就有one2many和one2one两个key
         preds = self.forward(batch["img"]) if preds is None else preds
         return self.criterion(preds, batch)
 
