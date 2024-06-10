@@ -245,6 +245,7 @@ class BasePredictor:
 
                 # Inference
                 with profilers[1]:
+                    # preds: 1x300x6
                     preds = self.inference(im, *args, **kwargs)
                     if self.args.embed:
                         yield from [preds] if isinstance(preds, torch.Tensor) else preds  # yield embedding tensors
